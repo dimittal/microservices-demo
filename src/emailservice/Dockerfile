@@ -46,5 +46,5 @@ COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 COPY . .
 
 EXPOSE 8080
-CMD ["newrelic-admin", "run-program", "python", "email_server.py"]
-# ENTRYPOINT [ "python", "email_server.py" ]
+ENTRYPOINT ["newrelic-admin", "run-program"]
+CMD ["python", "email_server.py"]
