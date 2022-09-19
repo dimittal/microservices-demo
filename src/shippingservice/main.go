@@ -36,6 +36,7 @@ import (
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/shippingservice/genproto"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	newrelic "github.com/newrelic/go-agent"
+	"github.com/newrelic/go-agent/_integrations/nrgrpc"
 )
 
 const (

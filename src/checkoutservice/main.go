@@ -37,6 +37,7 @@ import (
 	money "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
 	newrelic "github.com/newrelic/go-agent"
+	"github.com/newrelic/go-agent/_integrations/nrgrpc"
 )
 
 const (
