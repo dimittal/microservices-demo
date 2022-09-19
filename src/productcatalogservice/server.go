@@ -43,7 +43,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"github.com/newrelic/go-agent/v3/newrelic"
+	newrelic "github.com/newrelic/go-agent/v3/newrelic"
+	"github.com/newrelic/go-agent/_integrations/nrgrpc"
 )
 
 var (
@@ -74,8 +75,6 @@ func init() {
 		log.Warnf("could not parse product catalog")
 	}
 
-	cfg := newrelic.NewConfig("productcatalogservice", "1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL")
-	app, _ := newrelic.NewApplication(cfg)
 }
 
 func main() {
@@ -127,6 +126,8 @@ func main() {
 		port = os.Getenv("PORT")
 	}
 	log.Infof("starting grpc server at :%s", port)
+
+
 	run(port)
 	select {}
 }
@@ -136,6 +137,10 @@ func run(port string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	cfg := newrelic.NewConfig("productcatalogservice", "1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL")
+	app, _ := newrelic.NewApplication(cfg)
+	
 	var srv *grpc.Server
 	if os.Getenv("DISABLE_STATS") == "" {
 		log.Info("Stats enabled.")
