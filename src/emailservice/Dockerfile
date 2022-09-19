@@ -42,9 +42,11 @@ WORKDIR /email_server
 COPY --from=builder /usr/local/lib/python3.9/ /usr/local/lib/python3.9/
 COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 
+ENV NEW_RELIC_CONFIG_FILE='/email_server/newrelic.ini'
+
 # Add the application
 COPY . .
 
 EXPOSE 8080
-ENTRYPOINT ["newrelic-admin", "run-program"]
-CMD ["python", "email_server.py"]
+# ENTRYPOINT ["newrelic-admin", "run-program"]
+CMD ["newrelic-admin", "run-program", "python", "email_server.py"]
