@@ -74,18 +74,8 @@ func init() {
 		log.Warnf("could not parse product catalog")
 	}
 
-	app, err := newrelic.NewApplication(
-	    newrelic.ConfigAppName("productcatalogservice"),
-	    newrelic.ConfigLicense("1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL"),
-	    newrelic.ConfigAppLogForwardingEnabled(true),
-	)
-
 	cfg := newrelic.NewConfig("productcatalogservice", "1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL")
 	app, _ := newrelic.NewApplication(cfg)
-	server := grpc.NewServer(
-		grpc.UnaryInterceptor(nrgrpc.UnaryServerInterceptor(app)),
-		grpc.StreamInterceptor(nrgrpc.StreamServerInterceptor(app)),
-	)
 }
 
 func main() {
