@@ -42,6 +42,8 @@ WORKDIR /email_server
 COPY --from=builder /usr/local/lib/python3.9/ /usr/local/lib/python3.9/
 COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 
+COPY newrelic.ini /email_server
+
 ENV NEW_RELIC_CONFIG_FILE='/email_server/newrelic.ini'
 
 # Add the application
