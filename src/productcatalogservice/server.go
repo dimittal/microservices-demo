@@ -43,6 +43,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"github.com/newrelic/go-agent/v3/newrelic"
 )
 
 var (
@@ -72,6 +73,12 @@ func init() {
 	if err != nil {
 		log.Warnf("could not parse product catalog")
 	}
+
+	app, err := newrelic.NewApplication(
+	    newrelic.ConfigAppName("productcatalogservice"),
+	    newrelic.ConfigLicense("1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL"),
+	    newrelic.ConfigAppLogForwardingEnabled(true),
+	)
 }
 
 func main() {
