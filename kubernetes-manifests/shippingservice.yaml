@@ -40,7 +40,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: shippingservice
+        image: us-central1-docker.pkg.dev/imperial-data-362815/shippingservice/shippingservice:latest
         ports:
         - containerPort: 50051
         env:

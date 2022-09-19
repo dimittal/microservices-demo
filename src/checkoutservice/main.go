@@ -36,6 +36,7 @@ import (
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/genproto"
 	money "github.com/GoogleCloudPlatform/microservices-demo/src/checkoutservice/money"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
+	newrelic "github.com/newrelic/go-agent"
 )
 
 const (
@@ -103,13 +104,16 @@ func main() {
 		log.Fatal(err)
 	}
 
+	cfg := newrelic.NewConfig("checkoutservice", "1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL")
+	app, _ := newrelic.NewApplication(cfg)
+
 	var srv *grpc.Server
 	if os.Getenv("DISABLE_STATS") == "" {
 		log.Info("Stats enabled.")
-		srv = grpc.NewServer(grpc.StatsHandler(&ocgrpc.ServerHandler{}))
+		srv = grpc.NewServer(grpc.StatsHandler(&ocgrpc.ServerHandler{}), grpc.UnaryInterceptor(nrgrpc.UnaryServerInterceptor(app)), grpc.StreamInterceptor(nrgrpc.StreamServerInterceptor(app)))
 	} else {
 		log.Info("Stats disabled.")
-		srv = grpc.NewServer()
+		srv = grpc.NewServer(grpc.UnaryInterceptor(nrgrpc.UnaryServerInterceptor(app)), grpc.StreamInterceptor(nrgrpc.StreamServerInterceptor(app)))
 	}
 	pb.RegisterCheckoutServiceServer(srv, svc)
 	healthpb.RegisterHealthServer(srv, svc)

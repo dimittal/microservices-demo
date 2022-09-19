@@ -35,6 +35,7 @@ import (
 
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/shippingservice/genproto"
 	healthpb "google.golang.org/grpc/health/grpc_health_v1"
+	newrelic "github.com/newrelic/go-agent"
 )
 
 const (
@@ -83,13 +84,16 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
+	cfg := newrelic.NewConfig("shippingservice", "1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL")
+	app, _ := newrelic.NewApplication(cfg)
+
 	var srv *grpc.Server
 	if os.Getenv("DISABLE_STATS") == "" {
 		log.Info("Stats enabled.")
-		srv = grpc.NewServer(grpc.StatsHandler(&ocgrpc.ServerHandler{}))
+		srv = grpc.NewServer(grpc.StatsHandler(&ocgrpc.ServerHandler{}), grpc.UnaryInterceptor(nrgrpc.UnaryServerInterceptor(app)), grpc.StreamInterceptor(nrgrpc.StreamServerInterceptor(app)))
 	} else {
 		log.Info("Stats disabled.")
-		srv = grpc.NewServer()
+		srv = grpc.NewServer(grpc.UnaryInterceptor(nrgrpc.UnaryServerInterceptor(app)), grpc.StreamInterceptor(nrgrpc.StreamServerInterceptor(app)))
 	}
 	svc := &server{}
 	pb.RegisterShippingServiceServer(srv, svc)

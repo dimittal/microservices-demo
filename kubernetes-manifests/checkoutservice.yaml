@@ -40,7 +40,7 @@ spec:
                 - all
             privileged: false
             readOnlyRootFilesystem: true
-          image: checkoutservice
+          image: us-central1-docker.pkg.dev/imperial-data-362815/checkoutservice/checkoutservice:latest
           ports:
           - containerPort: 5050
           readinessProbe:
