@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: emailservice
+        image: us-central1-docker.pkg.dev/imperial-data-362815/emailservice/emailservice:latest
         ports:
         - containerPort: 8080
         env:
