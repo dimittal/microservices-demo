@@ -22,11 +22,12 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 
+RUN go get github.com/newrelic/go-agent/v3/newrelic
+
 # Skaffold passes in debug-oriented compiler flags
 ARG SKAFFOLD_GO_GCFLAGS
 RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /productcatalogservice .
 
-RUN go get github.com/newrelic/go-agent/v3/newrelic
 
 FROM alpine AS release
 RUN apk add --no-cache ca-certificates
