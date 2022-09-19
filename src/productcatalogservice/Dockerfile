@@ -22,7 +22,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 
-RUN go get github.com/newrelic/go-agent
+RUN go get github.com/newrelic/go-agent/v3/newrelic
 
 # Skaffold passes in debug-oriented compiler flags
 ARG SKAFFOLD_GO_GCFLAGS
