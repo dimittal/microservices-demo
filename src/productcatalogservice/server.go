@@ -43,7 +43,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	newrelic "github.com/newrelic/go-agent/v3/newrelic"
+	newrelic "github.com/newrelic/go-agent"
 	"github.com/newrelic/go-agent/_integrations/nrgrpc"
 )
 
@@ -140,7 +140,7 @@ func run(port string) string {
 
 	cfg := newrelic.NewConfig("productcatalogservice", "1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL")
 	app, _ := newrelic.NewApplication(cfg)
-	
+
 	var srv *grpc.Server
 	if os.Getenv("DISABLE_STATS") == "" {
 		log.Info("Stats enabled.")
