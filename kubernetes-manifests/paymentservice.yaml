@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: paymentservice
+        image: us-central1-docker.pkg.dev/imperial-data-362815/paymentservice/paymentservice:latest
         ports:
         - containerPort: 50051
         env:
