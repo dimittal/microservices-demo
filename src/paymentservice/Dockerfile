@@ -29,6 +29,8 @@ COPY package*.json ./
 
 RUN npm install --only=production
 
+RUN npm install newrelic --save
+
 FROM base
 
 RUN GRPC_HEALTH_PROBE_VERSION=v0.4.12 && \
@@ -38,6 +40,11 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.12 && \
 WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/node_modules ./node_modules
+
+COPY /usr/src/app/node_modules/newrelic/newrelic.js .
+
+ENV NEW_RELIC_APP_NAME='paymentservice'
+ENV NEW_RELIC_LICENSE_KEY='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'
 
 COPY . .
 

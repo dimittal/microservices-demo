@@ -16,6 +16,7 @@
 
 'use strict';
 
+const newrelic = require('newrelic');
 
 if(process.env.DISABLE_PROFILER) {
   console.log("Profiler disabled.")
