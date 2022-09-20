@@ -106,7 +106,9 @@ task adService(type: CreateStartScripts) {
     classpath = startScripts.classpath
     defaultJvmOpts =
             ["-Dlog4j2.contextDataInjector=io.opencensus.contrib.logcorrelation.log4j2.OpenCensusTraceContextDataInjector",
-             "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adservice,-cprof_service_version=1.0.0"]
+             "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adservice,-cprof_service_version=1.0.0",
+             "-Dnewrelic.config.app_name='AdService'", "-Dnewrelic.config.license_key='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'",
+             "-javaagent:/usr/local/newrelic/newrelic.jar"]
 }
 
 task adServiceClient(type: CreateStartScripts) {
@@ -116,7 +118,9 @@ task adServiceClient(type: CreateStartScripts) {
     classpath = startScripts.classpath
     defaultJvmOpts =
             ["-Dlog4j2.contextDataInjector=io.opencensus.contrib.logcorrelation.log4j2.OpenCensusTraceContextDataInjector",
-             "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adserviceclient,-cprof_service_version=1.0.0"]
+             "-agentpath:/opt/cprof/profiler_java_agent.so=-cprof_service=adserviceclient,-cprof_service_version=1.0.0",
+             "-Dnewrelic.config.app_name='AdService'", "-Dnewrelic.config.license_key='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'",
+             "-javaagent:/usr/local/newrelic/newrelic.jar"]
 }
 
 applicationDistribution.into('bin') {
