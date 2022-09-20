@@ -29,7 +29,7 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.11 && \
 # get packages
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-RUN pip install newrelic
+RUN pip install --no-cache-dir newrelic
 
 FROM base as final
 # Enable unbuffered logging
@@ -43,13 +43,11 @@ WORKDIR /email_server
 COPY --from=builder /usr/local/lib/python3.9/ /usr/local/lib/python3.9/
 COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 
-COPY newrelic.ini /email_server
-
 ENV NEW_RELIC_CONFIG_FILE='/email_server/newrelic.ini'
 
 # Add the application
 COPY . .
 
 EXPOSE 8080
-# ENTRYPOINT ["newrelic-admin", "run-program"]
-CMD ["newrelic-admin", "run-program", "python", "email_server.py"]
+ENTRYPOINT ["newrelic-admin", "run-program"]
+CMD ["python", "email_server.py"]
