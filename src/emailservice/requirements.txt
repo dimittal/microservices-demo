@@ -116,4 +116,3 @@ uritemplate==4.1.1
     # via google-api-python-client
 urllib3==1.26.12
     # via requests
-newrelic

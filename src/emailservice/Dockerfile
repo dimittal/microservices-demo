@@ -29,6 +29,7 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.11 && \
 # get packages
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+RUN pip install newrelic
 
 FROM base as final
 # Enable unbuffered logging
