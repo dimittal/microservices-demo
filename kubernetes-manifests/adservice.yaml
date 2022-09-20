@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: adservice
+        image: us-central1-docker.pkg.dev/imperial-data-362815/adservice/adservice:latest
         ports:
         - containerPort: 9555
         env:
