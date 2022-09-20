@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+ const newrelic = require('newrelic');
+
 if(process.env.DISABLE_PROFILER) {
   console.log("Profiler disabled.")
 }

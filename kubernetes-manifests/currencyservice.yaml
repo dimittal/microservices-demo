@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: currencyservice
+        image: us-central1-docker.pkg.dev/imperial-data-362815/currencyservice/currencyservice:latest
         ports:
         - name: grpc
           containerPort: 7000
