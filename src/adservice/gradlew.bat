@@ -33,7 +33,7 @@ set APP_HOME=%DIRNAME%
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m" "-Dnewrelic.config.app_name='AdService'" "-Dnewrelic.config.license_key='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'" "-javaagent:/usr/local/newrelic/newrelic.jar"
+set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
