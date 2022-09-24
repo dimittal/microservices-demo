@@ -51,5 +51,5 @@ ENV NEW_RELIC_INSERT_KEY='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'
 COPY . .
 
 EXPOSE 8080
-ENTRYPOINT ["newrelic-admin", "run-program"]
+# ENTRYPOINT ["newrelic-admin", "run-program"]
 CMD ["python", "email_server.py"]
