@@ -30,6 +30,7 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.11 && \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 RUN pip install --no-cache-dir newrelic
+RUN pip install --no-cache-dir opencensus-ext-newrelic
 
 FROM base as final
 # Enable unbuffered logging
@@ -44,6 +45,7 @@ COPY --from=builder /usr/local/lib/python3.9/ /usr/local/lib/python3.9/
 COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 
 ENV NEW_RELIC_CONFIG_FILE='/email_server/newrelic.ini'
+ENV NEW_RELIC_INSERT_KEY='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'
 
 # Add the application
 COPY . .

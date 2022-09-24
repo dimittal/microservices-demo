@@ -35,6 +35,12 @@ from opencensus.ext.grpc import server_interceptor
 from opencensus.common.transports.async_ import AsyncTransport
 from opencensus.trace import samplers
 
+from opencensus_ext_newrelic import NewRelicTraceExporter
+
+newrelic = NewRelicTraceExporter(
+    insert_key=os.environ["NEW_RELIC_INSERT_KEY"], service_name="emailservice"
+)
+
 # import googleclouddebugger
 import googlecloudprofiler
 
@@ -190,10 +196,7 @@ if __name__ == '__main__':
     else:
       logger.info("Tracing enabled.")
       sampler = samplers.AlwaysOnSampler()
-      exporter = stackdriver_exporter.StackdriverExporter(
-        project_id=os.environ.get('GCP_PROJECT_ID'),
-        transport=AsyncTransport)
-      tracer_interceptor = server_interceptor.OpenCensusServerInterceptor(sampler, exporter)
+      tracer_interceptor = server_interceptor.OpenCensusServerInterceptor(sampler, newrelic)
   except (KeyError, DefaultCredentialsError):
       logger.info("Tracing disabled.")
       tracer_interceptor = server_interceptor.OpenCensusServerInterceptor()
