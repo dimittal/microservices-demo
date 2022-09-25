@@ -195,7 +195,8 @@ if __name__ == '__main__':
       raise KeyError()
     else:
       logger.info("Tracing enabled.")
-      sampler = samplers.AlwaysOnSampler()exporter = stackdriver_exporter.StackdriverExporter(
+      sampler = samplers.AlwaysOnSampler()
+      exporter = stackdriver_exporter.StackdriverExporter(
         project_id=os.environ.get('GCP_PROJECT_ID'),
         transport=AsyncTransport)
       tracer_interceptor = server_interceptor.OpenCensusServerInterceptor(sampler, exporter)
