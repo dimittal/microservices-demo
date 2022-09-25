@@ -30,6 +30,7 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.12 && \
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 RUN pip install --no-cache-dir newrelic
+RUN pip install --no-cache-dir opencensus-ext-newrelic
 
 FROM base as final
 # Enable unbuffered logging
@@ -46,9 +47,12 @@ COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 COPY . .
 
 ENV NEW_RELIC_CONFIG_FILE='/recommendationservice/newrelic.ini'
+ENV NEW_RELIC_INSERT_KEY='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'
+ENV GCP_PROJECT_ID='imperial-data-362815'
 
 # set listen port
 ENV PORT "8080"
 EXPOSE 8080
 
-ENTRYPOINT ["newrelic-admin", "run-program", "python", "recommendation_server.py"]
+# ENTRYPOINT ["newrelic-admin", "run-program"]
+CMD ["python", "recommendation_server.py"]

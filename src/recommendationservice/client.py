@@ -23,6 +23,9 @@ from opencensus.trace.tracer import Tracer
 from opencensus.trace.exporters import stackdriver_exporter
 from opencensus.trace.ext.grpc import client_interceptor
 
+from opencensus.trace import samplers
+from opencensus_ext_newrelic import NewRelicTraceExporter
+
 from logger import getJSONLogger
 logger = getJSONLogger('recommendationservice-server')
 
@@ -34,8 +37,10 @@ if __name__ == "__main__":
         port = "8080"
 
     try:
-        exporter = stackdriver_exporter.StackdriverExporter()
-        tracer = Tracer(exporter=exporter)
+        newrelic = NewRelicTraceExporter(
+                insert_key=os.environ["NEW_RELIC_INSERT_KEY"], service_name="recommendationservice"
+        )
+        tracer = Tracer(exporter=newrelic, sampler=samplers.AlwaysOnSampler())
         tracer_interceptor = client_interceptor.OpenCensusClientInterceptor(tracer, host_port='localhost:'+port)
     except:
         tracer_interceptor = client_interceptor.OpenCensusClientInterceptor()
