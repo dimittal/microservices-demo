@@ -15,7 +15,6 @@
 # limitations under the License.
 
 import grpc
-import os
 
 import demo_pb2
 import demo_pb2_grpc
@@ -26,17 +25,19 @@ logger = getJSONLogger('emailservice-client')
 from opencensus.trace.tracer import Tracer
 from opencensus.trace.exporters import stackdriver_exporter
 from opencensus.trace.ext.grpc import client_interceptor
-from opencensus.common.transports.async_ import AsyncTransport
 
 from opencensus.trace import samplers
 from opencensus_ext_newrelic import NewRelicTraceExporter
 
 
 try:
-		exporter = stackdriver_exporter.StackdriverExporter(project_id=os.environ.get('GCP_PROJECT_ID'),transport=AsyncTransport)
-    tracer = Tracer(exporter=exporter)
+		newrelic = NewRelicTraceExporter(
+				insert_key=os.environ["NEW_RELIC_INSERT_KEY"], service_name="emailservice"
+		)
+		tracer = Tracer(exporter=newrelic, sampler=samplers.AlwaysOnSampler())
 		tracer_interceptor = client_interceptor.OpenCensusClientInterceptor(tracer, host_port='0.0.0.0:8080')
-except:
+except Exception as e:
+		logger.info('Exception in trace exporter. {}'.format(str(e)))
 		tracer_interceptor = client_interceptor.OpenCensusClientInterceptor()
 
 def send_confirmation_email(email, order):
