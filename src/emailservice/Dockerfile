@@ -46,6 +46,7 @@ COPY --from=builder /bin/grpc_health_probe /bin/grpc_health_probe
 
 ENV NEW_RELIC_CONFIG_FILE='/email_server/newrelic.ini'
 ENV NEW_RELIC_INSERT_KEY='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'
+ENV GCP_PROJECT_ID='imperial-data-362815'
 
 # Add the application
 COPY . .
