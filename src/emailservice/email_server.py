@@ -186,8 +186,8 @@ if __name__ == '__main__':
     else:
       logger.info("Profiler enabled.")
       initStackdriverProfiling()
-  except KeyError:
-      logger.info("Profiler disabled.")
+  except KeyError as e:
+      logger.info("Profiler disabled. {}".format(str(e)))
 
   # Tracing
   try:
@@ -195,10 +195,12 @@ if __name__ == '__main__':
       raise KeyError()
     else:
       logger.info("Tracing enabled.")
-      sampler = samplers.AlwaysOnSampler()
-      tracer_interceptor = server_interceptor.OpenCensusServerInterceptor(sampler, newrelic)
-  except (KeyError, DefaultCredentialsError):
-      logger.info("Tracing disabled.")
+      sampler = samplers.AlwaysOnSampler()exporter = stackdriver_exporter.StackdriverExporter(
+        project_id=os.environ.get('GCP_PROJECT_ID'),
+        transport=AsyncTransport)
+      tracer_interceptor = server_interceptor.OpenCensusServerInterceptor(sampler, exporter)
+  except (KeyError, DefaultCredentialsError) as e:
+      logger.info("Tracing disabled. {}".format(str(e)))
       tracer_interceptor = server_interceptor.OpenCensusServerInterceptor()
   except Exception as e:
       logger.warn(f"Exception on Cloud Trace setup: {traceback.format_exc()}, tracing disabled.") 
