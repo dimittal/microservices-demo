@@ -24,11 +24,10 @@ RUN ./gradlew downloadRepos
 RUN mkdir -p /usr/local/newrelic
 ADD ./newrelic/newrelic.jar /usr/local/newrelic/newrelic.jar
 ADD ./newrelic/newrelic.yml /usr/local/newrelic/newrelic.yml
-ENV JAVA_OPTS="$JAVA_OPTS -javaagent:/usr/local/newrelic/newrelic.jar"
-ENV JAVA_OPTS="$JAVA_OPTS -Dnewrelic.config.app_name='AdService'"
-ENV JAVA_OPTS="$JAVA_OPTS -Dnewrelic.config.license_key='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'"
-
 RUN chmod +x /usr/local/newrelic/newrelic.jar
+
+ENV JAVA_OPTS="$JAVA_OPTS -javaagent:/usr/local/newrelic/newrelic.jar -Dnewrelic.config.app_name='AdService' -Dnewrelic.config.license_key='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'"
+
 
 COPY . .
 RUN chmod +x gradlew
