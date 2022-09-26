@@ -21,13 +21,6 @@ COPY gradle gradle
 RUN chmod +x gradlew
 RUN ./gradlew downloadRepos
 
-RUN mkdir -p /usr/local/newrelic
-ADD ./newrelic/newrelic.jar /usr/local/newrelic/newrelic.jar
-ADD ./newrelic/newrelic.yml /usr/local/newrelic/newrelic.yml
-RUN chmod +x /usr/local/newrelic/newrelic.jar
-
-ENV JAVA_OPTS="$JAVA_OPTS -javaagent:/usr/local/newrelic/newrelic.jar -Dnewrelic.config.app_name='AdService' -Dnewrelic.config.license_key='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'"
-
 
 COPY . .
 RUN chmod +x gradlew
@@ -50,6 +43,13 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.12 && \
 
 WORKDIR /app
 COPY --from=builder /app .
+
+RUN mkdir -p /usr/local/newrelic
+ADD ./newrelic/newrelic.jar /usr/local/newrelic/newrelic.jar
+ADD ./newrelic/newrelic.yml /usr/local/newrelic/newrelic.yml
+RUN chmod +x /usr/local/newrelic/newrelic.jar
+
+ENV JAVA_OPTS="$JAVA_OPTS -javaagent:/usr/local/newrelic/newrelic.jar -Dnewrelic.config.app_name='AdService' -Dnewrelic.config.license_key='1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'"
 
 EXPOSE 9555
 ENTRYPOINT ["/app/build/install/hipstershop/bin/AdService"]

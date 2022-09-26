@@ -13,7 +13,7 @@ common: &default_settings
   # account. For example, if your license key is 12345 use this:
   # license_key: '12345'
   # The key binds your Agent's data to your account in the New Relic service.
-  license_key: '1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL'
+  license_key: 1e13529aa9c622f52ad2ab475d2bb7b66ab9NRAL
 
   # Agent Enabled
   # Use this setting to disable the agent instead of removing it from the startup command.
@@ -23,13 +23,13 @@ common: &default_settings
   # Set the name of your application as you'd like it show up in New Relic.
   # If enable_auto_app_naming is false, the agent reports all data to this application.
   # Otherwise, the agent reports only background tasks (transactions for non-web applications)
-  # to this application. To report data to more than one application 
+  # to this application. To report data to more than one application
   # (useful for rollup reporting), separate the application names with ";".
   # For example, to report data to "My Application" and "My Application 2" use this:
   # app_name: My Application;My Application 2
   # This setting is required. Up to 3 different application names can be specified.
   # The first application name must be unique.
-  app_name: AdService
+  app_name: adservice
 
   # To enable high security, set this property to true. When in high
   # security mode, the agent will use SSL and obfuscated SQL. Additionally,
@@ -97,35 +97,13 @@ common: &default_settings
     # a format that includes agent metadata for linking them to traces and errors.
     forwarding:
 
-      # When true, application logs will be forwarded to New Relic. The default is true.
+      # When true, application logs will be forwarded to New Relic. The default is false.
       enabled: true
 
       # Application log events are collected up to the configured amount. Afterwards,
       # events are sampled to maintain an even distribution across the harvest cycle.
       # Default is 10000. Setting to 0 will disable.
-      #max_samples_stored: 10000
-
-    # The agent will generate metrics to indicate the number of
-    # application log events occurring at each distinct log level.
-    metrics:
-
-      # When true, application log metrics will be reported. The default is true.
-      enabled: true
-
-    # The agent will add linking metadata to each log line in your application log files.
-    # This feature should only be used if you want to use a third party log forwarder, instead
-    # of the agent's built-in forwarding feature, to send your application log events to New Relic.
-    #local_decorating:
-
-      # When true, the agent will decorate your application log files with linking metadata. The default is false.
-      #enabled: false
-
-  # Adds integration with CodeStream, introducing Code-Level Metrics! Golden Signals visible in your
-  # IDE through New Relic CodeStream.
-  code_level_metrics:
-    # When true the agent will capture namespace and function information
-    # on spans to enable code level metrics in CodeStream.
-    enabled: false
+      max_samples_stored: 10000
 
   # Proxy settings for connecting to the New Relic server:
   # If a proxy is used, the host setting is required.  Other settings
@@ -139,25 +117,26 @@ common: &default_settings
   #proxy_password: password
   #proxy_scheme: https
 
-  # Limits the number of lines to capture for each stack trace. 
+  # Limits the number of lines to capture for each stack trace.
   # Default is 30
   max_stack_trace_lines: 30
 
   # Provides the ability to configure the attributes sent to New Relic. These
-  # attributes can be found in transaction traces, traced errors, Insight's 
+  # attributes can be found in transaction traces, traced errors, Insight's
   # transaction events, and Insight's page views.
   attributes:
-  
+
     # When true, attributes will be sent to New Relic. The default is true.
     enabled: true
-    
-    #A comma separated list of attribute keys whose values should 
+
+    #A comma separated list of attribute keys whose values should
     # be sent to New Relic.
     #include:
-    
-    # A comma separated list of attribute keys whose values should 
+
+    # A comma separated list of attribute keys whose values should
     # not be sent to New Relic.
     #exclude:
+
 
   # Transaction tracer captures deep information about slow
   # transactions and sends this to the New Relic service once a
@@ -203,7 +182,7 @@ common: &default_settings
     # Default is true.
     explain_enabled: true
 
-    # Threshold for query execution time below which query plans will not 
+    # Threshold for query execution time below which query plans will not
     # not be captured.  Relevant only when `explain_enabled` is true.
     # Default is 0.5 seconds.
     explain_threshold: 0.5
@@ -227,8 +206,7 @@ common: &default_settings
     # by providing a comma separated list of full class names.
     # The default is to exclude akka.actor.ActorKilledException. If you want to override
     # this, you must provide any new value as an empty list is ignored.
-    ignore_classes:
-      - "akka.actor.ActorKilledException"
+    ignore_errors: akka.actor.ActorKilledException
 
     # Use this property to exclude specific http status codes from being reported as errors
     # by providing a comma separated list of status codes.
@@ -236,8 +214,8 @@ common: &default_settings
     # this, you must provide any new value as an empty list is ignored.
     ignore_status_codes: 404
 
-  # Transaction Events are used for Histograms and Percentiles. Un-aggregated data is collected
-  # for each web transaction and sent to the server on harvest. 
+  # Transaction Events are used for Histograms and Percentiles. Unaggregated data is collected
+  # for each web transaction and sent to the server on harvest.
   transaction_events:
 
     # Set to false to disable transaction events.
@@ -250,47 +228,20 @@ common: &default_settings
     max_samples_stored: 2000
 
   # Distributed tracing lets you see the path that a request takes through your distributed system.
-  # This replaces the legacy Cross Application Tracing feature.
+  # Enabling distributed tracing changes the behavior of some New Relic features, so carefully consult the transition
+  # guide before you enable this feature: https://docs.newrelic.com/docs/apm/distributed-tracing/getting-started/transition-guide-distributed-tracing
+  # Default is false.
   distributed_tracing:
-
-    # Set to false to disable distributed tracing.
-    # Default is true.
     enabled: true
 
-    # Agent versions 5.10.0+ utilize both the newrelic header and W3C Trace Context headers for distributed tracing.
-    # The newrelic distributed tracing header allows interoperability with older agents that don't support W3C Trace Context headers.
-    # Agent versions that support W3C Trace Context headers will prioritize them over newrelic headers for distributed tracing.
-    # If you do not want to utilize the newrelic header, setting this to true will result in the agent excluding the newrelic header
-    # and only using W3C Trace Context headers for distributed tracing.
-    # Default is false.
-    exclude_newrelic_header: false
+  # Cross Application Tracing adds request and response headers to
+  # external calls using supported HTTP libraries to provide better
+  # performance data when calling applications monitored by other New Relic Agents.
+  cross_application_tracer:
 
-  # New Relic's distributed tracing UI uses Span events to display traces across different services.
-  # Span events capture attributes that describe execution context and provide linking metadata.
-  # Span events require distributed tracing to be enabled.
-  span_events:
-
-    # Set to false to disable Span events.
+    # Set to false to disable cross application tracing.
     # Default is true.
-    enabled: true
-
-    # Determines the number of Span events that can be captured during an agent harvest cycle.
-    # Increasing the number of Span events can lead to additional agent overhead. A maximum value may be imposed server side by New Relic.
-    # Default is 2000
-    max_samples_stored: 2000
-
-    # Provides the ability to filter the attributes attached to Span events.
-    # Custom attributes can be added to Span events using the NewRelic.getAgent().getTracedMethod().addCustomAttribute(...) API.
-    attributes:
-
-      # When true, attributes will be sent to New Relic. The default is true.
-      enabled: true
-
-      # A comma separated list of attribute keys whose values should be sent to New Relic.
-      #include:
-
-      # A comma separated list of attribute keys whose values should not be sent to New Relic.
-      #exclude:
+    enabled: false
 
   # Thread profiler measures wall clock time, CPU time, and method call counts
   # in your application's threads as they run.
@@ -304,7 +255,7 @@ common: &default_settings
   # New Relic Real User Monitoring gives you insight into the performance real users are
   # experiencing with your website. This is accomplished by measuring the time it takes for
   # your users' browsers to download and render your web pages by injecting a small amount
-  # of JavaScript code into the header and footer of each page. 
+  # of JavaScript code into the header and footer of each page.
   browser_monitoring:
 
     # By default the agent automatically inserts API calls in compiled JSPs to
@@ -314,11 +265,8 @@ common: &default_settings
     # Set this attribute to false to turn off this behavior.
     auto_instrument: true
 
-  # Class transformer can be used to disable all agent instrumentation or specific instrumentation modules.
-  # All instrumentation modules can be found here: https://github.com/newrelic/newrelic-java-agent/tree/main/instrumentation
   class_transformer:
-
-    # This instrumentation reports the name of the user principal returned from 
+    # This instrumentation reports the name of the user principal returned from
     # HttpServletRequest.getUserPrincipal() when servlets and filters are invoked.
     com.newrelic.instrumentation.servlet-user:
       enabled: false
@@ -363,8 +311,8 @@ common: &default_settings
   # Names and values may not contain colons (:) or semicolons (;).
   labels:
 
-    # An example label
-    #label_name: label_value
+  # An example label
+  #label_name: label_value
 
 
 # Application Environments
@@ -381,16 +329,15 @@ common: &default_settings
 
 development:
   <<: *default_settings
-  app_name: AdService (Development)
+  app_name: adservice (Development)
 
 test:
   <<: *default_settings
-  app_name: AdService (Test)
+  app_name: adservice (Test)
 
 production:
   <<: *default_settings
-  app_name: AdService
 
 staging:
   <<: *default_settings
-  app_name: AdService (Staging)
+  app_name: adservice (Staging)
