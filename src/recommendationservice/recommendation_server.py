@@ -29,6 +29,8 @@ from opencensus.ext.grpc import server_interceptor
 from opencensus.trace import samplers
 from opencensus.common.transports.async_ import AsyncTransport
 
+from opencensus_ext_newrelic import NewRelicTraceExporter
+
 import demo_pb2
 import demo_pb2_grpc
 from grpc_health.v1 import health_pb2
@@ -36,6 +38,10 @@ from grpc_health.v1 import health_pb2_grpc
 
 from logger import getJSONLogger
 logger = getJSONLogger('recommendationservice-server')
+
+newrelic = NewRelicTraceExporter(
+    insert_key=os.environ["NEW_RELIC_INSERT_KEY"], service_name="recommendationservice"
+)
 
 def initStackdriverProfiling():
   project_id = None
@@ -108,10 +114,7 @@ if __name__ == "__main__":
       else:
         logger.info("Tracing enabled.")
         sampler = samplers.AlwaysOnSampler()
-        exporter = stackdriver_exporter.StackdriverExporter(
-          project_id=os.environ.get('GCP_PROJECT_ID'),
-          transport=AsyncTransport)
-        tracer_interceptor = server_interceptor.OpenCensusServerInterceptor(sampler, exporter)
+        tracer_interceptor = server_interceptor.OpenCensusServerInterceptor(sampler, newrelic)
     except (KeyError, DefaultCredentialsError):
         logger.info("Tracing disabled.")
         tracer_interceptor = server_interceptor.OpenCensusServerInterceptor()

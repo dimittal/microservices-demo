@@ -35,9 +35,9 @@ from opencensus.ext.grpc import server_interceptor
 from opencensus.common.transports.async_ import AsyncTransport
 from opencensus.trace import samplers
 
-from opencensus_ext_newrelic import NewRelicStatsExporter
+from opencensus_ext_newrelic import NewRelicTraceExporter
 
-newrelic = NewRelicStatsExporter(
+newrelic = NewRelicTraceExporter(
     insert_key=os.environ["NEW_RELIC_INSERT_KEY"], service_name="emailservice"
 )
 
