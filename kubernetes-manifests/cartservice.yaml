@@ -41,7 +41,7 @@ spec:
               - all
           privileged: false
           readOnlyRootFilesystem: true
-        image: cartservice
+        image: us-central1-docker.pkg.dev/imperial-data-362815/cartservice/cartservice:latest
         ports:
         - containerPort: 7070
         env:
